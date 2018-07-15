@@ -272,31 +272,4 @@ if [ -z "$1" ] || contains "$*" vzlogger; then
         sudo make install
         
     popd
-
-	if [ ! -e "$systemd_unit" ]; then
-		echo
-		echo "could not find $systemd_unit"
-		echo "it is recommended to configure a vzlogger systemd service"
-		echo
-
-		read -p "add the systemd unit file? [y/N]" -n 1 -r
-		if [[ $REPLY =~ ^[Yy]$ ]]; then
-			echo
-			echo "installing systemd unit file"
-			sudo cp ./etc/vzlogger.service "$systemd_unit"
-			sudo sed -ie "s|/etc/vzlogger.conf|$vzlogger_conf|g" "$systemd_unit"
-		fi
-	fi
-
-	if [ ! -e "$vzlogger_conf" ]; then
-		echo
-		echo "could not find global config file $vzlogger_conf"
-		echo "make sure to configure vzlogger before running (see etc/vzlogger.conf)"
-	fi
-
-	if [ -n "$(pidof vzlogger)" ]; then
-		echo
-		echo "vzlogger is already running"
-		echo "make sure to restart vzlogger"
-	fi
 fi
